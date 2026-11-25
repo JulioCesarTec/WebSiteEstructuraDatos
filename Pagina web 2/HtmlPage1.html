@@ -1,0 +1,486 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Métodos de búsqueda | Estructura de Datos</title>
+    <style>
+        :root {
+            --navy: #102344;
+            --blue: #2457d6;
+            --teal: #13a58b;
+            --bg: #f4f7fb;
+            --ink: #17243a;
+            --muted: #607089;
+            --line: #e2e9f2
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font: 16px/1.65 "Segoe UI",Arial,sans-serif
+        }
+
+        .top {
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            background: #102344;
+            color: white;
+            padding: 15px max(22px,calc((100% - 1120px)/2));
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: center
+        }
+
+        .brand {
+            font-weight: 800
+        }
+
+        .nav {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap
+        }
+
+            .nav a {
+                color: #dce7fa;
+                text-decoration: none;
+                font-size: .9rem
+            }
+
+        .hero {
+            background: radial-gradient(circle at 85% 15%,#13a58b55,transparent 30%),linear-gradient(125deg,#102344,#2457d6);
+            color: white;
+            padding: 75px 22px
+        }
+
+        .hero-inner {
+            max-width: 1120px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1.3fr .7fr;
+            gap: 40px;
+            align-items: center
+        }
+
+        .eyebrow {
+            color: #9fe9dc;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 800;
+            font-size: .8rem
+        }
+
+        h1 {
+            font-size: clamp(2.7rem,5vw,4.5rem);
+            line-height: 1.08;
+            margin: 12px 0 20px
+        }
+
+        .hero p {
+            color: #dce7fa;
+            max-width: 650px;
+            font-size: 1.1rem
+        }
+
+        .hero a {
+            display: inline-block;
+            background: white;
+            color: #173d78;
+            padding: 12px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 800;
+            margin-top: 12px
+        }
+
+        .graphic {
+            border: 1px solid #ffffff55;
+            background: #ffffff12;
+            border-radius: 22px;
+            padding: 25px;
+            text-align: center
+        }
+
+        .cells {
+            display: flex;
+            justify-content: center;
+            gap: 7px;
+            margin: 18px 0
+        }
+
+            .cells span {
+                background: #fff;
+                color: #173d78;
+                padding: 12px;
+                border-radius: 9px;
+                font-weight: 800
+            }
+
+                .cells span:nth-child(3) {
+                    background: #8ce5d5
+                }
+
+        main {
+            max-width: 1120px;
+            margin: auto;
+            padding: 48px 22px 70px
+        }
+
+        .kicker {
+            color: var(--blue);
+            font-size: .78rem;
+            font-weight: 800;
+            letter-spacing: 1.3px;
+            text-transform: uppercase
+        }
+
+        h2 {
+            font-size: clamp(1.8rem,3vw,2.5rem);
+            margin: 6px 0 10px;
+            line-height: 1.2
+        }
+
+        .intro {
+            color: var(--muted);
+            max-width: 780px
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 18px;
+            margin: 25px 0 60px
+        }
+
+        .card, .demo {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 17px;
+            padding: 24px;
+            box-shadow: 0 12px 30px #192d5210
+        }
+
+            .card h3 {
+                margin: 12px 0 5px
+            }
+
+        .icon {
+            display: grid;
+            place-items: center;
+            background: #eaf0ff;
+            color: var(--blue);
+            width: 43px;
+            height: 43px;
+            border-radius: 12px;
+            font-weight: 900
+        }
+
+        .card p, .copy p, .copy li {
+            color: #566780
+        }
+
+        .topic {
+            scroll-margin-top: 90px;
+            margin-bottom: 58px
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr .92fr;
+            gap: 20px;
+            margin-top: 20px
+        }
+
+        .copy h3, .demo h3 {
+            margin: 0 0 10px
+        }
+
+        .copy ul {
+            padding-left: 22px
+        }
+
+        .note {
+            background: #eaf0ff;
+            border-left: 4px solid var(--blue);
+            padding: 13px 15px;
+            border-radius: 0 9px 9px 0;
+            color: #29477f;
+            margin-top: 15px
+        }
+
+        .demo {
+            background: linear-gradient(160deg,#fff,#f7faff)
+        }
+
+            .demo p {
+                color: var(--muted);
+                font-size: .9rem
+            }
+
+        .field {
+            display: block;
+            font-weight: 700;
+            font-size: .86rem;
+            margin: 13px 0 6px
+        }
+
+        input {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #ccd7e6;
+            border-radius: 9px;
+            font: inherit
+        }
+
+        .buttons {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+            margin-top: 14px
+        }
+
+        button {
+            border: 0;
+            border-radius: 9px;
+            padding: 11px 15px;
+            font-weight: 800;
+            cursor: pointer
+        }
+
+        .primary {
+            background: var(--blue);
+            color: white
+        }
+
+        .secondary {
+            background: #eaf0f8;
+            color: #31435f
+        }
+
+        .result {
+            padding: 12px;
+            margin-top: 14px;
+            background: #f0f4fa;
+            border: 1px dashed #c5d2e3;
+            border-radius: 9px;
+            color: #40536e;
+            min-height: 46px
+        }
+
+        .good {
+            background: #e6f7f3;
+            color: #126d5d;
+            border-color: #a6dfd2
+        }
+
+        .bad {
+            background: #fff0f0;
+            color: #9c3030;
+            border-color: #f0c4c4
+        }
+
+        .array {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 15px
+        }
+
+        .item {
+            padding: 7px 11px;
+            border: 1px solid #cbd7e7;
+            border-radius: 7px;
+            background: white;
+            font-weight: 800
+        }
+
+        .checked {
+            background: #fff3d9;
+            border-color: #e9bd59
+        }
+
+        .found {
+            background: #dff7ef;
+            border-color: #54b99b
+        }
+
+        .middle {
+            background: #e5edff;
+            border-color: #7d9be8
+        }
+
+        .hashgrid {
+            display: grid;
+            grid-template-columns: 48px 1fr;
+            gap: 5px;
+            margin-top: 14px
+        }
+
+            .hashgrid div {
+                padding: 8px;
+                border: 1px solid #d5deeb;
+                border-radius: 7px;
+                background: white
+            }
+
+                .hashgrid div:nth-child(odd) {
+                    background: #edf2ff;
+                    text-align: center;
+                    font-weight: 800;
+                    color: var(--blue)
+                }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px #192d5210;
+            margin-top: 20px
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px;
+            border-bottom: 1px solid var(--line)
+        }
+
+        th {
+            background: #162d50;
+            color: white
+        }
+
+        td {
+            color: #53647c
+        }
+
+        .team {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 12px;
+            margin-top: 20px
+        }
+
+        .person {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 15px;
+            font-weight: 700;
+            font-size: .9rem
+        }
+
+            .person b {
+                display: inline-grid;
+                place-items: center;
+                background: #eaf0ff;
+                color: var(--blue);
+                width: 34px;
+                height: 34px;
+                border-radius: 50%;
+                margin-right: 8px
+            }
+
+        footer {
+            text-align: center;
+            background: #102344;
+            color: #d8e2f5;
+            padding: 32px 20px
+        }
+
+            footer strong {
+                color: white
+            }
+
+            footer p {
+                margin: 5px
+            }
+
+            footer small {
+                color: #b9c9e5
+            }
+
+        @media(max-width:800px) {
+            .hero-inner, .layout {
+                grid-template-columns: 1fr
+            }
+
+            .cards {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .team {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .top {
+                align-items: flex-start;
+                flex-direction: column
+            }
+        }
+
+        @media(max-width:520px) {
+            .cards, .team {
+                grid-template-columns: 1fr
+            }
+
+            .nav {
+                gap: 10px
+            }
+
+            .hero {
+                padding: 55px 20px
+            }
+
+            main {
+                padding: 38px 17px
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="top"><div class="brand">▣ Estructura de Datos</div><nav class="nav"><a href="#secuencial">6.1 Secuencial</a><a href="#binaria">6.2 Binaria</a><a href="#hash">6.3 HASH</a><a href="#comparacion">Comparación</a></nav></header>
+    <section class="hero"><div class="hero-inner"><div><span class="eyebrow">Unidad 6 · Estructura de Datos</span><h1>Métodos de<br>búsqueda</h1><p>Conoce tres técnicas fundamentales para localizar información en una colección de datos. Aprende cómo funcionan, identifica sus diferencias y prueba los simuladores interactivos.</p><a href="#secuencial">Explorar los métodos →</a></div><div class="graphic"><div>LOCALIZACIÓN DE UN ELEMENTO</div><div class="cells"><span>12</span><span>18</span><span>24</span><span>31</span><span>46</span></div><small>Buscar · Comparar · Encontrar</small></div></div></section>
+    <main>
+        <section>
+            <span class="kicker">Introducción</span><h2>¿Qué son los métodos de búsqueda?</h2><p class="intro">Son algoritmos que permiten encontrar un dato específico dentro de una estructura, como un arreglo, una lista o una tabla. La elección depende de cómo están organizados los datos y de la rapidez que se necesita.</p>
+            <div class="cards"><article class="card"><div class="icon">01</div><h3>Búsqueda secuencial</h3><p>Revisa los elementos uno por uno hasta encontrar el valor o llegar al final.</p></article><article class="card"><div class="icon">02</div><h3>Búsqueda binaria</h3><p>Divide el intervalo de búsqueda a la mitad. Requiere datos ordenados.</p></article><article class="card"><div class="icon">03</div><h3>Búsqueda por HASH</h3><p>Calcula una posición mediante una función hash para acceder a los datos.</p></article></div>
+        </section>
+
+        <section class="topic" id="secuencial"><span class="kicker">Tema 6.1</span><h2>Búsqueda secuencial</h2><p class="intro">También llamada búsqueda lineal. Es uno de los métodos más sencillos y puede utilizarse aunque los datos no estén ordenados.</p><div class="layout"><article class="card copy"><h3>¿Cómo funciona?</h3><p>Comienza en el primer elemento y compara cada valor con el dato buscado. Si coinciden, devuelve la posición. Si llega al final sin encontrarlo, informa que el elemento no existe.</p><h3>Características</h3><ul><li>No requiere que los datos estén ordenados.</li><li>Es fácil de implementar y comprender.</li><li>Puede detenerse al encontrar la primera coincidencia.</li><li>En el peor caso revisa todos los elementos.</li></ul><div class="note"><b>Complejidad:</b> O(n) en el peor caso, porque puede revisar todos los elementos.</div><h3>Ejemplo cotidiano</h3><p>Buscar un nombre en una lista desordenada, leyendo desde el principio hasta encontrarlo.</p></article><aside class="demo"><h3>Simulador secuencial</h3><p>Escribe números separados por comas y el valor que deseas localizar.</p><label class="field" for="seqArray">Arreglo de datos</label><input id="seqArray" value="18, 7, 25, 12, 31, 9"><label class="field" for="seqTarget">Número a buscar</label><input id="seqTarget" type="number" value="12"><div class="buttons"><button class="primary" onclick="sequential()">Buscar elemento</button><button class="secondary" onclick="resetSeq()">Restablecer</button></div><div id="seqView" class="array"></div><div id="seqResult" class="result">Presiona “Buscar elemento” para iniciar.</div></aside></div></section>
+
+        <section class="topic" id="binaria"><span class="kicker">Tema 6.2</span><h2>Búsqueda binaria</h2><p class="intro">Es un método eficiente para colecciones ordenadas. En cada paso descarta aproximadamente la mitad de los elementos que todavía podrían contener el valor.</p><div class="layout"><article class="card copy"><h3>¿Cómo funciona?</h3><p>Se identifican los límites inferior y superior del arreglo y se calcula la posición central.</p><ul><li>Si el valor central es igual al objetivo, se encontró.</li><li>Si el objetivo es menor, se continúa en la mitad izquierda.</li><li>Si es mayor, se continúa en la mitad derecha.</li><li>Termina cuando se encuentra el dato o el intervalo queda vacío.</li></ul><div class="note"><b>Requisito:</b> los datos deben estar ordenados. <b>Complejidad:</b> O(log n) en el peor caso.</div><h3>Ejemplo cotidiano</h3><p>Buscar una palabra en un diccionario: se abre cerca de la mitad y se decide qué parte revisar según el orden alfabético.</p></article><aside class="demo"><h3>Simulador binario</h3><p>El simulador ordena los números antes de ejecutar la búsqueda.</p><label class="field" for="binArray">Números separados por comas</label><input id="binArray" value="4, 9, 13, 18, 24, 29, 35, 42, 51"><label class="field" for="binTarget">Número a buscar</label><input id="binTarget" type="number" value="29"><div class="buttons"><button class="primary" onclick="binary()">Buscar elemento</button><button class="secondary" onclick="resetBin()">Restablecer</button></div><div id="binView" class="array"></div><div id="binResult" class="result">Presiona “Buscar elemento” para iniciar.</div></aside></div></section>
+
+        <section class="topic" id="hash"><span class="kicker">Tema 6.3</span><h2>Búsqueda por funciones de HASH</h2><p class="intro">Utiliza una función matemática para transformar una clave en un índice de una tabla hash y acceder al lugar donde se almacena el dato.</p><div class="layout"><article class="card copy"><h3>¿Cómo funciona?</h3><p>Una función hash recibe una clave y calcula una posición dentro de una tabla. Una función sencilla para claves numéricas es:</p><div class="note"><b>h(clave) = clave módulo tamaño_de_tabla</b><br>El operador módulo (%) obtiene el residuo de una división.</div><ul><li>Se calcula el índice aplicando la función hash.</li><li>Se consulta la posición correspondiente.</li><li>Si hay más de una clave en el mismo índice, se debe resolver la colisión.</li></ul><h3>Colisiones</h3><p>Ocurren cuando dos claves diferentes producen el mismo índice. Una solución es el <b>encadenamiento</b>: guardar una lista de elementos en cada posición que comparte índice.</p><div class="note"><b>Complejidad:</b> O(1) promedio con una buena distribución; O(n) en el peor caso si muchas claves colisionan.</div><h3>Ejemplo cotidiano</h3><p>Un inventario puede calcular una posición a partir del código numérico de cada producto para acceder a su registro.</p></article><aside class="demo"><h3>Simulador de tabla HASH</h3><p>Se utiliza módulo 7 y encadenamiento para mostrar las colisiones.</p><label class="field" for="hashKeys">Claves almacenadas</label><input id="hashKeys" value="18, 25, 32, 10, 21, 14"><label class="field" for="hashTarget">Clave que deseas buscar</label><input id="hashTarget" type="number" value="25"><div class="buttons"><button class="primary" onclick="hashSearch()">Construir y buscar</button><button class="secondary" onclick="resetHash()">Restablecer</button></div><div id="hashView"></div><div id="hashResult" class="result">Presiona “Construir y buscar” para iniciar.</div></aside></div></section>
+
+        <section id="comparacion"><span class="kicker">Análisis comparativo</span><h2>Comparación de los métodos</h2><p class="intro">La complejidad permite estimar cómo cambia el trabajo del algoritmo cuando aumenta la cantidad de datos.</p><table><thead><tr><th>Método</th><th>¿Requiere orden?</th><th>Promedio</th><th>Peor caso</th><th>Uso recomendado</th></tr></thead><tbody><tr><td><b>Secuencial</b></td><td>No</td><td>O(n)</td><td>O(n)</td><td>Datos pequeños o desordenados.</td></tr><tr><td><b>Binaria</b></td><td>Sí</td><td>O(log n)</td><td>O(log n)</td><td>Datos ordenados y acceso por índice.</td></tr><tr><td><b>HASH</b></td><td>No</td><td>O(1) esperado</td><td>O(n)</td><td>Consultas frecuentes por clave.</td></tr></tbody></table><div class="note"><b>Conclusión:</b> no existe un único método ideal para todos los casos. La búsqueda secuencial destaca por su sencillez, la binaria por su eficiencia en datos ordenados y HASH por su acceso promedio rápido mediante claves.</div></section>
+
+        <section style="margin-top:60px" id="integrantes"><span class="kicker">Proyecto académico</span><h2>Integrantes del equipo</h2><p class="intro">Ingeniería en Sistemas Computacionales · Materia: Estructura de Datos</p><div class="team"><div class="person"><b>IM</b>Irvin Gerardo Martinez Fernandez</div><div class="person"><b>JR</b>Julio Cesar Ramirez Holguin</div><div class="person"><b>DV</b>Diego Vazquez Melendez</div><div class="person"><b>JC</b>Juan Raul Cardenas Granados</div></div></section>
+    </main>
+    <footer><p><strong>Métodos de búsqueda en Estructura de Datos</strong></p><p>Proyecto educativo · Unidad 6 · 2026</p><small>Irvin Gerardo Martinez Fernandez · Julio Cesar Ramirez Holguin · Diego Vazquez Melendez · Juan Raul Cardenas Granados</small></footer>
+
+    <script>
+function numbers(id){const a=document.getElementById(id).value.split(",").map(x=>x.trim());if(!a.length||a.some(x=>x===""||!Number.isFinite(Number(x))))throw Error("Ingresa números válidos separados por comas.");return a.map(Number)}
+function result(id,msg,kind=""){let e=document.getElementById(id);e.className="result "+kind;e.textContent=msg}
+function draw(id,a,states={}){let e=document.getElementById(id);e.innerHTML="";a.forEach((v,i)=>{let s=document.createElement("span");s.className="item "+(states[i]||"");s.textContent=v;s.title="Posición "+i;e.appendChild(s)})}
+function sequential(){try{let a=numbers("seqArray"),t=Number(document.getElementById("seqTarget").value),f=-1,c=0,s={};if(!Number.isFinite(t))throw Error("Escribe un número para buscar.");for(let i=0;i<a.length;i++){c++;s[i]="checked";if(a[i]===t){f=i;s[i]="found";break}}draw("seqView",a,s);result("seqResult",f>=0?`Encontrado en la posición ${f}. Comparaciones: ${c}.`:`No se encontró. Elementos revisados: ${c}.`,f>=0?"good":"bad")}catch(e){result("seqResult",e.message,"bad")}}
+function resetSeq(){seqArray.value="18, 7, 25, 12, 31, 9";seqTarget.value=12;seqView.innerHTML="";result("seqResult","Presiona “Buscar elemento” para iniciar.")}
+function binary(){try{let a=numbers("binArray").sort((x,y)=>x-y),t=Number(binTarget.value),l=0,h=a.length-1,f=-1,c=0,s={};if(!Number.isFinite(t))throw Error("Escribe un número para buscar.");while(l<=h){let m=Math.floor((l+h)/2);c++;s[m]="middle";if(a[m]===t){f=m;s[m]="found";break}if(t<a[m])h=m-1;else l=m+1}draw("binView",a,s);result("binResult",f>=0?`Encontrado en la posición ${f} del arreglo ordenado. Comparaciones: ${c}.`:`No se encontró en el arreglo ordenado. Comparaciones: ${c}.`,f>=0?"good":"bad")}catch(e){result("binResult",e.message,"bad")}}
+function resetBin(){binArray.value="4, 9, 13, 18, 24, 29, 35, 42, 51";binTarget.value=29;binView.innerHTML="";result("binResult","Presiona “Buscar elemento” para iniciar.")}
+function hashSearch(){try{let a=numbers("hashKeys"),t=Number(hashTarget.value),size=7;if(a.some(x=>!Number.isInteger(x)||x<0)||!Number.isInteger(t)||t<0)throw Error("Utiliza claves enteras no negativas.");let table=Array.from({length:size},()=>[]);a.forEach(x=>table[x%size].push(x));let index=t%size,found=table[index].includes(t),v=document.getElementById("hashView");v.innerHTML="";table.forEach((bucket,i)=>{let n=document.createElement("div"),b=document.createElement("div");n.textContent=i;b.textContent=bucket.length?bucket.join(" → "):"Vacío";v.append(n,b)});v.className="hashgrid";result("hashResult",found?`Clave encontrada en índice ${index}: h(${t}) = ${t} % ${size} = ${index}.`:`La clave se asigna al índice ${index}, pero no está almacenada.`,found?"good":"bad")}catch(e){result("hashResult",e.message,"bad")}}
+function resetHash(){hashKeys.value="18, 25, 32, 10, 21, 14";hashTarget.value=25;hashView.innerHTML="";result("hashResult","Presiona “Construir y buscar” para iniciar.")}</script>
+</body>
+</html>
